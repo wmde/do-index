@@ -1,0 +1,57 @@
+{% load crowdsourcing %}
+<html>
+<head>
+  <title>[do:index] Umfrage</title>
+  {% include "header_tags.html" %}
+</head>
+<body>
+<div class="container">
+{% if user.is_authenticated %}
+<h2> [do:index] </h2>
+<h4>Eingeloggt als <br/>{{user}}</h4>
+{% for survey in surveys %}
+<div id="{{ survey.slug }}">
+</div>
+<div id="{{survey.slug}}choice">
+<h3>{{survey.title}}</h3> <div id="{{survey.slug}}showbutton" class="btn btn-primary">Bearbeiten</div>
+<script>
+    $('#{{survey.slug}}showbutton').click(function () {
+	loadSurvey('{{survey.slug}}', '{{survey.slug}}');
+	$('#{{survey.slug}}choice').remove();
+    });
+</script>
+</div>
+{% endfor %}
+{% else %}
+    <h1>[do:index]</h1>
+    <br><p>
+    Dies ist die Umfrageseite von der [do:index] Befragung 2013.<br/>
+     Sie können sich als eingeladene Stadt oder Gemeinde mit den Ihnen zugeschickten Anmeldedaten anmelden.<br/>
+<p>
+<a href="#myModal" role="button" class="btn" data-toggle="modal">Einloggen und Umfrage beginnen!</a>
+</p>
+    <a href="http://www.do-index.org/">Weitere Infos zu [do:index]</a> 
+    </p>
+<!--
+    Hier finden den aktuellen Status der Umfrage - Statuspage coming.
+--> 
+<div id="myModal" class="modal hide fade" tabindex="-1" role="form"  aria-hidden="true">
+            <form class="modal-body" id="modal-form" action='/login/' method="POST">
+            {% csrf_token %}
+                {% if form.errors %}
+                    {{ form.errors}}
+                {% endif %}
+                <label class="myModalLabel" for="id_email">Name:</label>
+                <input type="text" name="email" id="id_email">
+                <br />
+                <label class="myModalLabel" for="id_password">Passwort:</label>
+                <input type="password" name="password" id="id_password">
+                <br />
+                <input class="btn btn-primary" type="submit" value="Einloggen" />
+                <input type="hidden" name="next" value="{{ current_path }}" />
+            </form>
+	    </div>
+{% endif %}
+</div>
+</body>
+</html>

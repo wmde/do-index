@@ -1,0 +1,230 @@
+body {
+	font: 9.5pt Arial, Helvetica, 'Liberation Sans', FreeSans, sans-serif;
+}
+
+ul {
+	list-style-type: none;
+	padding: 0;
+}	
+
+ul li {
+	margin: 4px 0;
+}
+.errorlist {
+    color: red;
+    font-size: large;
+    font-weight: bold;
+}
+
+.surveytitle {
+    margin: 5px;
+    font-size: large;
+    font-weight: bold;
+}
+.surveyrow {
+    margin: 5px;
+}
+
+/*
+.survey p {
+    padding: 10px;
+}
+.survey label, .survey input, .survey textarea {
+	display: block;
+	margin: 2px;
+}
+.survey p label {
+    padding: 5px;
+    margin-bottom: 20px;
+    font-size: x-large;
+}
+
+.survey textarea {
+	width: 600px;
+	height: 120px;
+	border: 3px solid #cccccc;
+	padding: 5px;
+	font-family: Tahoma, sans-serif;
+}
+.survey label {
+	font-weight: bold;
+}
+
+.survey ul li input {
+	display: inline;
+}
+
+.survey label.help_text {
+	display: inline;
+}
+
+.helptext {
+    padding: 20px;
+    display:block;
+    text-align:justify;
+    font-size: 14px !important;
+    color: #999;
+}
+
+*/
+
+.question p input[type=text] {
+
+	line-height: 30px !important;
+	height: 30px !important;
+	min-height: 30px !important;
+	font-size: 1em;
+
+}
+
+.required {
+        color: #dd0000;
+        margin: 0 5px;
+}
+
+.enlarge_link { background-image: url('/media/enlarge-icon.png'); }
+
+#latest_survey_results_div {
+	border-top: 2px solid #ddd;
+	margin-top: 20px;
+}
+
+form .filters {
+        margin: 10px 0 15px;
+        padding: 10px 12px;
+        background-color: #f6f6f6;
+        border: 1px solid #ddd;
+}
+
+form .filters ul li {
+        margin: 5px 0;
+}
+
+form .filters label {
+        margin-right: 10px;
+}
+
+form .filters #location label,
+form .filters #number label,
+form .filters #decimal label {
+        color: #666;
+        margin: 0 0 0 5px;
+}
+
+h2.chart_title {
+	background-color: #F6F6F6;
+	border-top: 1px solid #DDDDDD;
+	display: block;
+	margin: 20px 0 0;
+	padding: 5px 10px;
+}
+
+.submission {
+	border-top: 2px dotted #CCCCCC;
+	padding: 15px 0;
+}
+
+.submission .field {
+	padding: 3px 0;
+} 
+
+.submission .field label {
+	font-weight: bold;
+	padding-right: 2px;
+}
+
+.jcarousel-skin-tango .jcarousel-clip-horizontal {
+  height: 275px;
+  width: 500px;
+}
+
+.jcarousel-skin-tango .jcarousel-container-horizontal {
+  width: 510px;
+}
+
+.jcarousel-skin-tango .jcarousel-item {
+    height: 275px;
+    width: 250px;
+}
+
+/* verschlimmbesserungen von @yetzt */
+	
+	.survey_wrapper {
+		
+		display: block;
+		position: relative;
+		
+	}
+	
+	.survey .question {
+		
+		display: block;
+		position: relative;
+		margin: 0px;
+		padding: 10px 20px;
+		border: 1px solid #eee;
+		border-radius: 5px;
+		background-color: #f9f9f9;
+		box-shadow: 3px 3px 5px 0px rgba(0,0,0,0.05) inset;
+		margin-bottom: 50px;
+		
+	}
+
+		.survey .question h3 {
+			
+			line-height: 1.4em;
+			
+		}
+
+			.survey .question h3 label {
+			
+				font-size: inherit;
+				font-weight: inherit;
+				line-height: inherit;
+				padding: 0px;
+
+			}
+	
+		.survey .question label {
+			
+			font-size: 1em;
+			font-weight: bold;
+			
+		}
+
+		.survey .question .helptext {
+		
+			font-size: 1em;
+			color: #666;
+			
+		}
+
+		.survey .question textarea {
+			
+			height: 50px;
+			
+		}
+
+	
+/* fixes */
+
+.survey {
+
+	margin-top: 50px;
+	
+}
+
+.survey p {
+	padding: 10px 0px;
+}
+
+.survey label {
+	padding: 5px 0px;
+	margin: 0px;
+}
+
+.container {
+
+	padding: 60px 0px;
+
+}

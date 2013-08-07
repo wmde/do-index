@@ -1,0 +1,47 @@
+            /* fix form to proper html */
+            
+            /* remove empty paragraphs */
+            $('p:empty',form).remove();
+            
+            /* wrap question logically, determined by textarea */
+            $("label+textarea",form).parent().after("<hr class=\"split\" />");
+            var itms = form.html().split('<hr class="split">');
+            form.html('');
+            $(itms).each(function(idx,itm){
+              if (!itm.match(/preliminarysubmit/)) {
+                form.append('<div class="question" id="question-'+idx+'">'+itm+'</div>');
+              } else {
+                form.append('<div class="form-actions">'+itm+'</div>');
+              }
+            });
+
+            /* fix first label */
+            $('.question',form).each(function(idx,e){
+              $('p label', e).eq(0).wrap('<h3 />');
+            });
+            
+            /* extract structural headlines from question headlines */
+            $('h3 label',form).each(function(idx,h){
+              var $h = $(h);
+              var m = $(h).text().match(/^([0-9] [^0-9]+)\n([0-9]\.1 .*)$/);
+              if (m) {
+                $h.text(m[2]);
+                var n = m[1].match(/\(\(\(([^\)]+)\)\)\)/);
+                if (n) {
+                  var hl = m[1].replace(/\s+\(\(\(([^\)]+)\)\)\)\s+/g,' ');
+                  $h.parents('.question').before('<h2>'+hl+'</h2><p>'+n[1]+'</p>');
+                } else {
+                  $h.parents('.question').before('<h2>'+m[1]+'</h2>');
+                }
+              }
+            });
+            
+            /* give radio and checkbox labels proper class for bootstrap */
+            
+            $('input:radio',form).parent().addClass('radio');
+            $('input:checkbox',form).parent().addClass('checkbox');
+            
+            /* replace textareas with inputs */
+            $('textarea', form).addClass('input-block-level');
+            
+
