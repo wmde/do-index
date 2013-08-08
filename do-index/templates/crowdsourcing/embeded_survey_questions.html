@@ -6,10 +6,34 @@
   {% for form in forms %}
     {{ form.as_p }}
   {% endfor %}
-  <input type="submit" value="Submit" />
+  <span id="preliminary" class="btn btn-primary btn-large" name="preliminary">Umfrage zwischenspeichern</span>
+  <button type="submit" id="finalsubmit" class="btn btn-primary btn-large" name="finalsubmit">Umfrage abschliessen und abschicken</button>
   {% if entered %}
     <span class="error">Please fix the problems above.</span>
   {% endif %}
+  <script type="text/javascript">
+    // Fill in the form with saved values
+    $.ajax({ 
+	      url: '/getPreliminary/',
+	      data: 'slug={{survey.slug}}'
+    }).done(function ( formdata ) {
+	$('form').populate( formdata );
+    });
+    // Submit
+    $( "#finalsubmit" ).click(function() {
+	  $('form').submit();
+    });
+    // Save values in form
+    $( "#preliminary" ).click(function() {
+	$.ajax({
+  		url: "/preliminary/",
+  		data: "slug={{survey.slug}}&" + "queryString=" + $('form').serialize()
+		})
+	.done(function( msg ) {
+	    window.location.replace( "/" );
+	});
+    });
+  </script>
 {% endif %}
 {% if entered %}
    <script type="text/javascript">
