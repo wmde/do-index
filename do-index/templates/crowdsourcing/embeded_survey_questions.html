@@ -8,9 +8,6 @@
   {% endfor %}
   <span id="preliminary" class="btn btn-primary btn-large" name="preliminary">Umfrage zwischenspeichern</span>
   <button type="submit" id="finalsubmit" class="btn btn-primary btn-large" name="finalsubmit">Umfrage abschliessen und abschicken</button>
-  {% if entered %}
-    <span class="error">Please fix the problems above.</span>
-  {% endif %}
   <script type="text/javascript">
     // Fill in the form with saved values
     $.ajax({ 
@@ -19,26 +16,67 @@
     }).done(function ( formdata ) {
 	$('form').populate( formdata );
     });
-    // Submit
-    $( "#finalsubmit" ).click(function() {
-	  $('form').submit();
-    });
+
+    function urlencode (str) {
+	  return encodeURIComponent(str).replace(/!/g, '%21').replace(/'/g, '%27').replace(/\(/g, '%28').
+	  replace(/\)/g, '%29').replace(/\*/g, '%2A').replace(/%20/g, '+');
+    }
+
     // Save values in form
     $( "#preliminary" ).click(function() {
 	$.ajax({
   		url: "/preliminary/",
-  		data: "slug={{survey.slug}}&" + "queryString=" + $('form').serialize()
+  		data: "slug={{survey.slug}}&" + "queryString=" + urlencode($('form').serialize()) 
 		})
 	.done(function( msg ) {
 	    window.location.replace( "/" );
 	});
     });
   </script>
-{% endif %}
-{% if entered %}
-   <script type="text/javascript">
-        $('div.container').html('');
-        $('div.container').html('<h1>[do:index]</h1><p> {{ survey.thanks }} </p> <button type="submit" id="backbutton" class="btn btn-primary btn-large" name="backbutton">Zurück zur Umfragenübersicht</button>');
-        $('#backbutton').attr('onClick', 'window.location.replace("/")');
-   </script>
+  {% if request.POST %}
+	<script type="text/javascript">
+	    if ($("label").size() !== 0) {
+		/* Fix HTML */ 
+		var error_form = $('form');
+     
+		/* remove empty paragraphs */
+		$('p:empty',error_form).remove();
+
+		/* give radio and checkbox labels proper class for bootstrap */
+		$('input:radio',error_form).parent().addClass('radio');
+		$('input:checkbox',error_form).parent().addClass('checkbox');
+		
+		/* replace textareas with inputs */
+		$('textarea', error_form).addClass('input-block-level');
+		$('label',error_form).each(function(idx,h){
+		  var $h = $(h);
+		  var m = $(h).text().match(/^([0-9] [^0-9]+)\n([0-9]\.1 .*)$/);
+		  if (m) {
+		    $h.text(m[2]);
+		    var n = m[1].match(/\(\(\(([^\)]+)\)\)\)/);
+		    if (n) {
+		      var hl = m[1].replace(/\s+\(\(\(([^\)]+)\)\)\)\s+/g,' ');
+		      $h.parents('.question').before('<h2>'+hl+'</h2><p>'+n[1]+'</p>');
+		    } else {
+		      $h.parents('.question').before('<h2>'+m[1]+'</h2>');
+		    }
+		  }
+		});
+		/* wrap question logically, determined by textarea */
+		$("label+textarea",error_form).parent().after("<hr class=\"split\" />");
+		var itms = error_form.html().split('<hr class="split" />');
+		error_form.html('');
+		$(itms).each(function(idx,itm){
+		    error_form.append('<div class="question" id="question-'+idx+'">'+itm+'</div>');
+		});
+	
+	    } else {
+		/* Say thanks and draw button to return to front page */
+		$('div.container').html('');
+		$('div.container').html('<h1>[do:index]</h1><p> {{ survey.thanks }} </p> <button type="submit" id="backbutton" class="btn btn-primary btn-large" name="backbutton">Zurück zur Umfragenübersicht</button>');
+		$('#backbutton').attr('onClick', 'window.location.replace("/")');
+	    }
+
+        </script>
+  {% endif %}
 {% endif %}

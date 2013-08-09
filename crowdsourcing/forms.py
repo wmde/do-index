@@ -51,7 +51,7 @@ class BaseAnswerForm(Form):
         self.submission = submission
         super(BaseAnswerForm, self).__init__(*args, **kwargs)
         self._configure_answer_field()
-
+    
     def _configure_answer_field(self):
         answer = self.fields['answer']
         q = self.question
@@ -242,6 +242,10 @@ class SubmissionForm(ModelForm):
     def __init__(self, survey, *args, **kwargs):
         super(SubmissionForm, self).__init__(*args, **kwargs)
         self.survey = survey
+
+    class Media:
+	js = ('fixhtml.js',)
+
 
     class Meta:
         model = Submission
