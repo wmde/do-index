@@ -19,6 +19,8 @@ def home(request):
     submitted = []
     if request.user.is_authenticated():
 	submitted = Submission.objects.filter(user = request.user)
+	if 'city' in [x['name'] for x in request.user.groups.values()]:
+	    surveys = surveys.exclude(slug='oe')
     s = []
     for survey in surveys:
 	if survey in filter(lambda x: x.id in map(lambda x: x.survey_id, submitted), surveys):
