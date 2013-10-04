@@ -7,7 +7,7 @@ from crowdsourcing import forms
 from django.contrib.auth import authenticate
 from django.contrib.auth import login as login_user
 from django.contrib.auth import logout 
-from .models import Preliminary
+from .models import Preliminary, User
 import json, urlparse, re
 
 class LoginForm(forms.Form):
@@ -41,7 +41,7 @@ def preliminary(request):
     data = json.dumps(qs)
     slug = request.GET['slug']
     try:
-	old_data = Preliminary.objects.get(user = request.user)
+	old_data = Preliminary.objects.get(user = request.user, slug = slug)
 	old_data.delete()
     except:
 	# First save
@@ -95,3 +95,10 @@ def login(request):
             return render_to_response('home.html', context_instance=RequestContext(request))
     else:
         return render_to_response('home.html', context_instance=RequestContext(request))
+
+def overview(request):
+    maintenance= ["staedtetag_test", "probewien", "testing", "teststadt", "test", "test2", "test3", "test4", "testjohl", "walter", "root", "Nikita", "Eva", "Daniela", "Stephan"]
+    last_logins = filter(lambda x: x[1] not in maintenance, sorted([(u.last_login.isoformat(), u.username) for u in User.objects.all()], key=lambda x:x[0], reverse=True))
+    completed_surveys = [(s.user.username, s.survey.title)  for s in Submission.objects.all()]
+    dictionary  = {'logins': last_logins, 'surveys': completed_surveys}
+    return render_to_response('overview.html', dictionary)

@@ -1,0 +1,12 @@
+<h2>Zuletzt eingeloggt</h2>
+<ul>
+{% for login in logins %}
+<li>{{login.1}} zuletzt eingeloggt: {{login.0}}</li>
+{%endfor%}
+</ul>
+<ul>
+<h2>Ausgefülle Umfragen</h2>
+{% for survey in surveys %}
+<li>{{survey.0}} hat folgende Umfragen ausgefüllt: {{survey.1}} </li>
+{%endfor%}
+</ul>
