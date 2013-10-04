@@ -14,6 +14,26 @@ class LoginForm(forms.Form):
         email = forms.CharField(label=(u'Email'), max_length=30)
 	password = forms.CharField(label=(u'Pass'), max_length=30)
 
+def no_ie(redirect):
+    """
+    Protects a view from the terror that is Microsoft Internet Explorer
+    by redirecting the request to 'redirect'.
+    
+    Usage:
+    
+    @no_ie('/ie-compatible-page/')
+    def my view(request):
+       ...
+    
+    """
+    def view_wrapper(view):
+        def dec(request, *args, **kwargs):
+            if request.META['HTTP_USER_AGENT'].find('MSIE') > 0:
+                return HttpResponseRedirect(redirect)
+            return view(request, *args, **kwargs)
+        return dec
+    return view_wrapper
+
 def home(request):
     surveys = Survey.objects.all()
     submitted = []
