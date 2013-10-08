@@ -34,6 +34,7 @@ def no_ie(redirect):
         return dec
     return view_wrapper
 
+@no_ie('/update-ie/')
 def home(request):
     surveys = Survey.objects.all()
     submitted = []
@@ -122,3 +123,12 @@ def overview(request):
     completed_surveys = [(s.user.username, s.survey.title)  for s in Submission.objects.all()]
     dictionary  = {'logins': last_logins, 'surveys': completed_surveys}
     return render_to_response('overview.html', dictionary)
+
+def overview_public(request):
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+
+def update_ie(request):
+    return render_to_response('ie.html')
+
+
+
