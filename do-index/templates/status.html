@@ -1,0 +1,69 @@
+{% load dictionary_extras %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>[do:index] Status</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="/media/bootstrap3/css/bootstrap.min.css" rel="stylesheet" media="screen">
+  </head>
+  <body>
+    <div class="container">
+    <table class="table table-hover">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Open Data</th>
+            <th>Open Infrastructure</th>
+            <th>Open Software</th>
+            <th>Open Policies</th>
+            <th>Open Educational Resources</th>
+          </tr>
+        </thead>
+        <tbody>
+	  {% for user in users %}
+          <tr>
+            <td>{{user}}</td>
+            <td>
+              <div class="progress ">
+                <div class="progress-bar progress-bar-{{stats|access:user|access:'od'}}" style="width:100%">
+                  <span class="sr-only">{{stats|access:user|access:'od'}}</span>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="progress ">
+                <div class="progress-bar progress-bar-{{stats|access:user|access:'oi'}}" style="width:100%">
+                  <span class="sr-only">{{stats|access:user|access:'oi'}}</span>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="progress ">
+                <div class="progress-bar progress-bar-{{stats|access:user|access:'os'}}" style="width:100%">
+                  <span class="sr-only">{{stats|access:user|access:'os'}}</span>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="progress ">
+                <div class="progress-bar progress-bar-{{stats|access:user|access:'op'}}" style="width:100%">
+                  <span class="sr-only">{{stats|access:user|access:'op'}}</span>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="progress ">
+                <div class="progress-bar progress-bar-{{stats|access:user|access:'oe'}}" style="width:100%">
+                  <span class="sr-only">{{stats|access:user|access:'oe'}}</span>
+                </div>
+              </div>
+            </td>
+          </tr>
+	{% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <script src="//code.jquery.com/jquery.js"></script>
+    <script src="/media/bootstrap3/js/bootstrap.min.js"></script>
+  </body>
+</html>

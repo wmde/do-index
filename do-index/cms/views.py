@@ -8,11 +8,22 @@ from django.contrib.auth import authenticate
 from django.contrib.auth import login as login_user
 from django.contrib.auth import logout 
 from .models import Preliminary, User
+from collections import defaultdict
 import json, urlparse, re
+
+maintenance= ["staedtetag_test", "probewien", "Austria", "Graz-OpenData", "testing", "teststadt", "test", "test2", "test3", "test4", "test5", "test8", "test9", "testjohl", "walter", "root", "Nikita", "Eva", "Daniela", "Stephan"]
 
 class LoginForm(forms.Form):
         email = forms.CharField(label=(u'Email'), max_length=30)
 	password = forms.CharField(label=(u'Pass'), max_length=30)
+
+def to_dict(d):
+    """
+    Transform defaultdict to nested dict
+    """
+    if isinstance(d, defaultdict):
+        return dict((k, to_dict(v)) for k, v in d.items())
+    return d
 
 def no_ie(redirect):
     """
@@ -118,17 +129,32 @@ def login(request):
         return render_to_response('home.html', context_instance=RequestContext(request))
 
 def overview(request):
-    maintenance= ["staedtetag_test", "probewien", "testing", "teststadt", "test", "test2", "test3", "test4", "testjohl", "walter", "root", "Nikita", "Eva", "Daniela", "Stephan"]
     last_logins = filter(lambda x: x[1] not in maintenance, sorted([(u.last_login.isoformat(), u.username) for u in User.objects.all()], key=lambda x:x[0], reverse=True))
     completed_surveys = [(s.user.username, s.survey.title)  for s in Submission.objects.all()]
     dictionary  = {'logins': last_logins, 'surveys': completed_surveys}
     return render_to_response('overview.html', dictionary)
 
 def overview_public(request):
-    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+    completed_surveys = [(s.user.username, s.survey.slug) for s in filter(lambda x: x.user.username not in maintenance, Submission.objects.all())]
+    incomplete_surveys = [(s.user.username, s.slug) for s in filter(lambda x: x.user.username not in maintenance, Preliminary.objects.all())]
+    users = sorted([u.username for u in filter(lambda x: x.username not in maintenance, User.objects.all())])
+    Tree = lambda: defaultdict(Tree)
+    stats = Tree() # autovivification
+    surveys = [s.slug for s in Survey.objects.all()]
+    for u in users:
+	for s in surveys:
+	    stats[u][s] = "danger" # default: not completed, not started
+	    if (u, s) in completed_surveys:
+		stats[u][s] = "success"
+	    if (u, s) in incomplete_surveys:
+		stats[u][s] = "warning"
+    stats = to_dict(stats)
+    return render_to_response('status.html', 
+    {
+	'stats': stats,
+	'users': users
+    }, context_instance=RequestContext(request))					
 
 def update_ie(request):
     return render_to_response('ie.html')
-
-
 
