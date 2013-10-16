@@ -134,10 +134,11 @@ def overview(request):
     dictionary  = {'logins': last_logins, 'surveys': completed_surveys}
     return render_to_response('overview.html', dictionary)
 
-def overview_public(request):
+def status(request):
     completed_surveys = [(s.user.username, s.survey.slug) for s in filter(lambda x: x.user.username not in maintenance, Submission.objects.all())]
     incomplete_surveys = [(s.user.username, s.slug) for s in filter(lambda x: x.user.username not in maintenance, Preliminary.objects.all())]
     users = sorted([u.username for u in filter(lambda x: x.username not in maintenance, User.objects.all())])
+    areas = sorted([u.username for u in filter(lambda x: x.username not in maintenance and str(x.groups.values_list()[0][1]) != 'city', User.objects.all())])
     Tree = lambda: defaultdict(Tree)
     stats = Tree() # autovivification
     surveys = [s.slug for s in Survey.objects.all()]
@@ -149,10 +150,15 @@ def overview_public(request):
 	    if (u, s) in incomplete_surveys:
 		stats[u][s] = "warning"
     stats = to_dict(stats)
+    cities = filter(lambda x: x not in areas, users)     
+    cities_at = sorted(["Wien", "Salzburg", "Linz", "Innsbruck", "Graz"])
+    cities_de = sorted(filter(lambda x: x not in cities_at, cities))
     return render_to_response('status.html', 
     {
 	'stats': stats,
-	'users': users
+	'areas': areas,
+	'cities_de': cities_de,
+	'cities_at': cities_at,
     }, context_instance=RequestContext(request))					
 
 def update_ie(request):

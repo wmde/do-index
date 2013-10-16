@@ -8,6 +8,7 @@
   </head>
   <body>
     <div class="container">
+    <h2>Bundesländer (Deutschland)</h2>
     <table class="table table-hover">
         <thead>
           <tr>
@@ -20,7 +21,7 @@
           </tr>
         </thead>
         <tbody>
-	  {% for user in users %}
+	  {% for user in areas %}
           <tr>
             <td>{{user}}</td>
             <td>
@@ -55,6 +56,100 @@
               <div class="progress ">
                 <div class="progress-bar progress-bar-{{stats|access:user|access:'oe'}}" style="width:100%">
                   <span class="sr-only">{{stats|access:user|access:'oe'}}</span>
+                </div>
+              </div>
+            </td>
+          </tr>
+	{% endfor %}
+        </tbody>
+      </table>
+    <h2>Städte (Deutschland)</h2>
+    <table class="table table-hover">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Open Data</th>
+            <th>Open Infrastructure</th>
+            <th>Open Software</th>
+            <th>Open Policies</th>
+          </tr>
+        </thead>
+        <tbody>
+	  {% for user in cities_de %}
+          <tr>
+            <td>{{user}}</td>
+            <td>
+              <div class="progress ">
+                <div class="progress-bar progress-bar-{{stats|access:user|access:'od'}}" style="width:100%">
+                  <span class="sr-only">{{stats|access:user|access:'od'}}</span>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="progress ">
+                <div class="progress-bar progress-bar-{{stats|access:user|access:'oi'}}" style="width:100%">
+                  <span class="sr-only">{{stats|access:user|access:'oi'}}</span>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="progress ">
+                <div class="progress-bar progress-bar-{{stats|access:user|access:'os'}}" style="width:100%">
+                  <span class="sr-only">{{stats|access:user|access:'os'}}</span>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="progress ">
+                <div class="progress-bar progress-bar-{{stats|access:user|access:'op'}}" style="width:100%">
+                  <span class="sr-only">{{stats|access:user|access:'op'}}</span>
+                </div>
+              </div>
+            </td>
+          </tr>
+	{% endfor %}
+        </tbody>
+      </table>
+    <h2>Städte (Österreich)</h2>
+    <table class="table table-hover">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Open Data</th>
+            <th>Open Infrastructure</th>
+            <th>Open Software</th>
+            <th>Open Policies</th>
+          </tr>
+        </thead>
+        <tbody>
+	  {% for user in cities_at %}
+          <tr>
+            <td>{{user}}</td>
+            <td>
+              <div class="progress ">
+                <div class="progress-bar progress-bar-{{stats|access:user|access:'od'}}" style="width:100%">
+                  <span class="sr-only">{{stats|access:user|access:'od'}}</span>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="progress ">
+                <div class="progress-bar progress-bar-{{stats|access:user|access:'oi'}}" style="width:100%">
+                  <span class="sr-only">{{stats|access:user|access:'oi'}}</span>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="progress ">
+                <div class="progress-bar progress-bar-{{stats|access:user|access:'os'}}" style="width:100%">
+                  <span class="sr-only">{{stats|access:user|access:'os'}}</span>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="progress ">
+                <div class="progress-bar progress-bar-{{stats|access:user|access:'op'}}" style="width:100%">
+                  <span class="sr-only">{{stats|access:user|access:'op'}}</span>
                 </div>
               </div>
             </td>
