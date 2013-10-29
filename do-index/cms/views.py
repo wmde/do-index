@@ -73,19 +73,22 @@ def preliminary(request):
     data = json.dumps(qs)
     slug = request.GET['slug']
     try:
-	old_data = Preliminary.objects.get(user = request.user, slug = slug)
-	old_data.delete()
+	old_data = Preliminary.objects.filter(user = request.user, slug = slug)
+	for o in old_data:
+	    o.delete()
     except:
 	# First save
 	pass
     preliminary_data = Preliminary(user = request.user, save_string = data, slug = slug)
-    preliminary_data.save()
-    return HttpResponse("Got json data")
+    preliminary_data.save(force_insert=True)
+    return HttpResponse("Got json data", content_type="text/plain")
 
 def getPreliminary(request):
     try:
 	string = Preliminary.objects.get(user = request.user, slug = request.GET['slug']).save_string
     except Preliminary.DoesNotExist:
+	string = '{}'
+    except Preliminary.MultipleObjectsReturned:
 	string = '{}'
     return HttpResponse(string, content_type="application/json")
 
@@ -107,7 +110,7 @@ def finalize(request):
 	else:
 	    final = {}
 	    final['final'] = False
-	    return HttpResponse(json.dumps(final), content_type="application/json")
+	    return HttpResponse(json.dumps(final), content_type="application/json; charset=utf-8")
 
 def login(request):
     if request.user.is_authenticated():
