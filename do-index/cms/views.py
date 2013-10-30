@@ -69,7 +69,7 @@ def home(request):
         RequestContext(request))
 
 def preliminary(request):
-    qs = dict( ( k, v if len(v)>1 else v[0] ) for k, v in urlparse.parse_qs(request.GET['queryString']).iteritems() )
+    qs = dict( ( k, v if len(v)>1 else v[0] ) for k, v in urlparse.parse_qs(request.GET['queryString'].encode('utf-8')).iteritems() )
     data = json.dumps(qs)
     slug = request.GET['slug']
     try:
@@ -90,7 +90,7 @@ def getPreliminary(request):
 	string = '{}'
     except Preliminary.MultipleObjectsReturned:
 	string = '{}'
-    return HttpResponse(string, content_type="application/json")
+    return HttpResponse(string, content_type="application/json; charset=utf-8")
 
 def completed_surveys(user):
     all_submissions = sorted([submission.survey.title for submission in filter(lambda x: x.user_id == user, Submission.objects.all())])
