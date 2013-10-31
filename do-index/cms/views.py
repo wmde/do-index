@@ -69,9 +69,14 @@ def home(request):
         RequestContext(request))
 
 def preliminary(request):
-    qs = dict( ( k, v if len(v)>1 else v[0] ) for k, v in urlparse.parse_qs(request.GET['queryString'].encode('utf-8')).iteritems() )
+    if request.method == 'POST' and request.POST:
+	queryString = request.POST.get('queryString')
+	slug = request.POST.get('slug')
+    else:
+	queryString = request.GET['queryString']
+	slug = request.GET['slug']
+    qs = dict( ( k, v if len(v)>1 else v[0] ) for k, v in urlparse.parse_qs(queryString.encode('utf-8')).iteritems() )
     data = json.dumps(qs)
-    slug = request.GET['slug']
     try:
 	old_data = Preliminary.objects.filter(user = request.user, slug = slug)
 	for o in old_data:

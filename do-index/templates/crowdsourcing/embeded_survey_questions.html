@@ -25,6 +25,7 @@
     // Save values in form
     $( "#preliminary" ).click(function() {
 	$.ajax({
+		type: 'POST',
   		url: "/preliminary/",
   		data: "slug={{survey.slug}}&" + "queryString=" + urlencode($('form').serialize()) 
 		})
