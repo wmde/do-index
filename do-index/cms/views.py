@@ -1,6 +1,7 @@
 from django.shortcuts import render_to_response
 from django.template import RequestContext
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect, HttpResponse, HttpResponseServerError
+from django.db import IntegrityError
 
 from crowdsourcing.models import Survey, Submission
 from crowdsourcing import forms
@@ -172,3 +173,24 @@ def status(request):
 def update_ie(request):
     return render_to_response('ie.html')
 
+def create_new_user(request):
+    if request.POST and request.method == 'POST':
+	data = json.loads(request.POST.keys()[0])
+ 	try:
+ 	  username = data['username']
+ 	  email = data.get('email')
+ 	  password = data['password']
+	  if email == None:
+	    email = ''
+	  user = User.objects.create_user(username=username, email=email, password=password)
+	  user.is_active = True
+	  user.is_staff = True
+	  user.save() 
+	  return HttpResponse("User created.")
+ 	except KeyError:
+ 	  HttpResponseServerError("Malformed data!")
+	#except IntegrityError:
+	#  HttpResponseServerError("Unable to create user!")
+    return HttpResponse("Got json data")
+
+  
